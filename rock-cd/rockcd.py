@@ -68,7 +68,7 @@ class RockCD(object):
         df = pd.DataFrame.from_dict(self.attrs, orient='index')
         attributes = pd.get_dummies(df).values
         # computes attributes similarity matrix
-        similarity_matrix = RockCD.__jaccard_attributes_similarity_matrix(attributes)
+        similarity_matrix = RockCD.__jaccard_attributes_similarity_matrix(adjacency_matrix, attributes)
 
         # computes initial ROCD matrix
         self.matrix = self.__get_ROCK_matrix(adjacency_matrix, similarity_matrix)
@@ -91,14 +91,16 @@ class RockCD(object):
 
         self.communities = list(self.best_partition.values())
 
-    def __jaccard_attributes_similarity_matrix(data: list):
+    def __jaccard_attributes_similarity_matrix(adjacency_matrix, data: list):
         sim_matrix = np.zeros((len(data), len(data)))
         for i in range(len(data)):
             for j in range(len(data)):
                 if i == j:
                     sim_matrix[i][j] = 1
-                else:
+                elif adjacency_matrix.iloc[i,j] == 1:
                     sim_matrix[i][j] = jaccard_score(data[i], data[j])
+                else:
+                    sim_matrix[i][j] = 0   
 
         return sim_matrix
 
