@@ -56,11 +56,11 @@ class RockCD(object):
                 f"quality parameter must be one of the following: {QUALITY_FUNCTIONS}"
             )
 
-        self.setup()
+        self.__setup()
 
-        self.execute()
+        self.__execute()
 
-    def setup(self):
+    def __setup(self):
         adjacency_matrix = nx.to_pandas_adjacency(self.graph)
 
         # creates list of attributes for Jaccard
@@ -73,7 +73,7 @@ class RockCD(object):
         # computes initial ROCD matrix
         self.matrix = self.__get_ROCK_matrix(adjacency_matrix, similarity_matrix)
 
-    def execute(self):
+    def __execute(self):
         """
         Executes ROCK-CD algorithm
         """
